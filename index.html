@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tablelize by softerize</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Tablelize</h1>
+      <h2 class="project-tagline">Customizable Laravel Eloquent html tables with pagination, search, sorting and buttons.</h2>
+      <a href="https://github.com/softerize/tablelize" class="btn">View on GitHub</a>
+      <a href="https://github.com/softerize/tablelize/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/softerize/tablelize/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="table-list" class="anchor" href="#table-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tablelize</h1>
+
+<p>Customizable Laravel Eloquent html tables with pagination, search, sorting and buttons.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Require it directly with composer:</p>
+
+<pre><code>$ composer require softerize/tablelize
+</code></pre>
+
+<p>Or add it to composer.json:</p>
+
+<pre><code>{
+    "require": {
+        "softerize/tablelize": "&gt;=0.1.0"
+    }
+}
+</code></pre>
+
+<p>After updating composer, add the ServiceProvider to the providers array in config/app.php</p>
+
+<pre><code>Softerize\Tablelize\TablelizeServiceProvider::class,</code></pre>
+
+<h2>
+<a id="simple-execution" class="anchor" href="#simple-execution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple execution</h2>
+
+<p>In your route/controller, do the following:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Route</span><span class="pl-k">::</span>get(<span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-c1">\Illuminate\Http\</span><span class="pl-c1">Request</span> <span class="pl-smi">$request</span>){</span>
+<span class="pl-s1">    <span class="pl-c">// Create the html table using your model and the request object</span></span>
+<span class="pl-s1">    <span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>);</span>
+<span class="pl-s1">    <span class="pl-k">return</span> view(<span class="pl-s"><span class="pl-pds">'</span>home.index<span class="pl-pds">'</span></span>, <span class="pl-c1">compact</span>(<span class="pl-s"><span class="pl-pds">'</span>tablelize<span class="pl-pds">'</span></span>));</span>
+<span class="pl-s1">});</span></pre></div>
+
+<p>In your view simply generate the HTML:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">@</span><span class="pl-k">extends</span>(<span class="pl-s"><span class="pl-pds">'</span>layouts.app<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">@</span>section(<span class="pl-s"><span class="pl-pds">'</span>content<span class="pl-pds">'</span></span>)</span>
+<span class="pl-s1">{<span class="pl-k">!!</span> <span class="pl-smi">$tablelize</span><span class="pl-k">-&gt;</span>generate() <span class="pl-k">!!</span>}</span>
+<span class="pl-s1"><span class="pl-k">@</span><span class="pl-c1">endsection</span></span></pre></div>
+
+<p>This is what you'll get:</p>
+
+<p><img src="http://www.softerize.com/wp-content/uploads/2016/09/example-simple.png" alt="Simple example"></p>
+
+<h2>
+<a id="executing-with-more-options" class="anchor" href="#executing-with-more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Executing with more options</h2>
+
+<p>If you want to customize fields and add buttons you can use the following logic:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Route</span><span class="pl-k">::</span>get(<span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-c1">\Illuminate\Http\</span><span class="pl-c1">Request</span> <span class="pl-smi">$request</span>){</span>
+<span class="pl-s1">    <span class="pl-c">// You can define this array inside your model</span></span>
+<span class="pl-s1">    <span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>fields<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            [</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Date<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>formatDate<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">            ],</span>
+<span class="pl-s1">            [</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Level<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>displayLevel<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>escape<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">false</span></span>
+<span class="pl-s1">            ]</span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>buttons<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">            [</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>new-link<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-plus<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">            ]</span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>rowActions<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">            [</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>view-link<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-search<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">            ]</span>
+<span class="pl-s1">        ]</span>
+<span class="pl-s1">    ];</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span>
+<span class="pl-s1">    <span class="pl-k">return</span> view(<span class="pl-s"><span class="pl-pds">'</span>home.index<span class="pl-pds">'</span></span>, <span class="pl-c1">compact</span>(<span class="pl-s"><span class="pl-pds">'</span>tablelize<span class="pl-pds">'</span></span>));</span>
+<span class="pl-s1">});</span></pre></div>
+
+<p>The view is the same as in the simple execution. In your model you can define methods to display in your table:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">formatDate</span>(<span class="pl-smi">$field_value</span>) {</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-c1">date</span>(<span class="pl-s"><span class="pl-pds">'</span>jS \of F Y<span class="pl-pds">'</span></span>, <span class="pl-c1">strtotime</span>(<span class="pl-smi">$field_value</span>));</span>
+<span class="pl-s1">        <span class="pl-c">// Or</span></span>
+<span class="pl-s1">        <span class="pl-c">// return $this-&gt;updated_at-&gt;format('jS \of F Y');</span></span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">displayLevel</span>(<span class="pl-smi">$field_value</span>) {</span>
+<span class="pl-s1">        <span class="pl-k">if</span>(<span class="pl-smi">$field_value</span> <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>Google<span class="pl-pds">'</span></span>) {</span>
+<span class="pl-s1">            <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;span class="label label-success"&gt;High&lt;/span&gt;<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1">        }</span>
+<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;span class="label label-danger"&gt;Low&lt;/span&gt;<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s1">    }</span></pre></div>
+
+<p>The result of the advanced example is:</p>
+
+<p><img src="http://www.softerize.com/wp-content/uploads/2016/09/example-advanced.png" alt="Advanced example"></p>
+
+<h2>
+<a id="creating-the-instance" class="anchor" href="#creating-the-instance" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating the instance</h2>
+
+<p>In order to create a new instance, you have to instantiate the class <code>\Softerize\Tablelize\Tablelize</code>. The construct method takes 3 paramenters <code>($query, Request $request, array $options = [])</code>.</p>
+
+<h3>
+<a id="query" class="anchor" href="#query" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$query</h3>
+
+<p>You have 3 possibilities to use as the first parameter:</p>
+
+<p>Use a model instance:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-k">new</span> <span class="pl-c1">\App\Models\</span><span class="pl-c1">Link</span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+
+<p>Use a query builder object:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">\App\Models\</span><span class="pl-c1">Link</span><span class="pl-k">::</span>select(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>where(<span class="pl-s"><span class="pl-pds">'</span>created_at<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>2016-08-01<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-smi">$query</span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+
+<p>Simply use a string with the model name (complete with all namespaces):</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+
+<h3>
+<a id="request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$request</h3>
+
+<p>This is the request object you get from Laravel.</p>
+
+<h3>
+<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$options</h3>
+
+<p>Here is the complete list of options you can use at this time.</p>
+
+<h4>
+<a id="url" class="anchor" href="#url" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>url</h4>
+
+<p>Define the base URL to be used by the search form.</p>
+
+<p><small><em>Default:</em> current URL (<code>$request-&gt;path()</code>)</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="id" class="anchor" href="#id" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>id</h4>
+
+<p>In case you have more than one table in the same page (inside tabs for example), you can use the ID to differentiate them.</p>
+
+<p><small><em>Default:</em> current URL, with _ replacing the /</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="fields" class="anchor" href="#fields" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>fields</h4>
+
+<p>Array with fields definition. You can use methods as well for greater control over the display. Each field can be a simple string with the field name or an array with the following options:</p>
+
+<ul>
+<li>name: field name</li>
+<li>label: field label</li>
+<li>method: model method to be executed - optional</li>
+<li>escape: can be defined as false to for HTML values</li>
+<li>search: can be defined as false to prevent searching the field</li>
+</ul>
+
+<p><small><em>Default:</em> fields will be automatically fetched from the query or the model - labels will be trans('validation.attributes.'.$field_name)</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>fields<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Date<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>formatDate<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Level<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>displayLevel<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>escape<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">false</span></span>
+<span class="pl-s1">        ]</span>
+<span class="pl-s1">    ]</span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="querystring" class="anchor" href="#querystring" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>queryString</h4>
+
+<p>Array with additional query string values. Useful if you need to define which tab the list is associated with. This way when you take an action on an specific list, the queryString parameters will be sent with the request.</p>
+
+<p><small><em>Default:</em> empty</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>queryString<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>tab<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ]</span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="sort-and-sortorder" class="anchor" href="#sort-and-sortorder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>sort and sortOrder</h4>
+
+<p>Default field for sorting and initial sort order.</p>
+
+<p><small><em>Default:</em> first field from the list in ASC order</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>sort<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>sortOrder<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>desc<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="buttons" class="anchor" href="#buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>buttons</h4>
+
+<p>Array with buttons definition. Each button can be a string with the HTML or an array with the following options:</p>
+
+<ul>
+<li>text: button text</li>
+<li>url: button link</li>
+<li>icon: if you want to add an icon to the button - optional</li>
+<li>css: class to be used by the button - optional - by default all buttons will be 'btn btn-primary'</li>
+<li>title: title attribute of the button - optional</li>
+</ul>
+
+<p><small><em>Default:</em> none</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>buttons<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>new-link<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-plus<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New link<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>settings<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-cog<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Settings<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Settings<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>css<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-success<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ]</span>
+<span class="pl-s1">    ]</span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="rowactions" class="anchor" href="#rowactions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rowActions</h4>
+
+<p>Array with buttons for each entry. Each button can be a string with the HTML or an array with the following options:</p>
+
+<ul>
+<li>text: button text</li>
+<li>url: button link - the idField will be added as a parameter for each entry</li>
+<li>icon: if you want to add an icon to the button - optional</li>
+<li>css: class to be used by the button - optional - by default all buttons will be 'btn btn-primary'</li>
+<li>title: title attribute of the button - optional</li>
+</ul>
+
+<p><small><em>Default:</em> none</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>buttons<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>view-link<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-search<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View entry<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ],</span>
+<span class="pl-s1">        [</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>delete-link<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-remove<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Delete<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Delete<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>css<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-danger<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">        ]</span>
+<span class="pl-s1">    ]</span>
+<span class="pl-s1">];</span></pre></div>
+
+<h4>
+<a id="noentriesmsg" class="anchor" href="#noentriesmsg" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>noEntriesMsg</h4>
+
+<p>In case you want to change the message shown when there are no entries you can do that using this parameter.</p>
+
+<p><small><em>Default:</em> 'No entries found.'</small></p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>noEntriesMsg<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Nothing here!!<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">];</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/softerize/table-list">Tablelize</a> is maintained by <a href="https://github.com/softerize">softerize</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
