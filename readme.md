@@ -59,3 +59,9 @@ If you want a more distinct look, you can use additional options and turn it int
 ## Documentation
 
 You'll find the complete documentation at [https://softerize.github.io/tablelize/](https://softerize.github.io/tablelize/).
+
+## Support
+
+In case you need support, please create an issue and we will check it as soon as possible.
+
+If you want to hire a professional support, let us know at [http://www.softerize.com/contact/](http://www.softerize.com/contact/).
