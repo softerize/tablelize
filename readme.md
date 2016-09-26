@@ -4,9 +4,13 @@ Customizable Laravel Eloquent html tables with pagination, search, sorting and b
 
 ## Installation
 
+Require it directly with composer:
+
 ```
 $ composer require softerize/tablelize
 ```
+
+Or add it to composer.json:
 
 ```
 {
@@ -14,6 +18,12 @@ $ composer require softerize/tablelize
         "softerize/tablelize": ">=0.1.0"
     }
 }
+```
+
+After updating composer, add the ServiceProvider to the providers array in config/app.php
+
+```php
+Softerize\Tablelize\TablelizeServiceProvider::class,
 ```
 
 ## Simple execution
