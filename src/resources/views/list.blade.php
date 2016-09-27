@@ -47,7 +47,7 @@
                 </tr>
                 <tr class="active">
                     @foreach($fields as $field)
-                        {!! headerTableList($id, $field, $sortField, $sortOrder) !!}
+                        {!! headerTablelize($id, $field, $sortField, $sortOrder) !!}
                     @endforeach
                     @if($rowActions)
                     <th>Actions</th>
@@ -61,9 +61,9 @@
                         @foreach($fields as $field)
                         <td>
                             @if(isset($field['escape']) && $field['escape'] === false)
-                            {!! fieldTableList($row, $field) !!}
+                            {!! fieldTablelize($row, $field) !!}
                             @else
-                            {{ fieldTableList($row, $field) }}
+                            {{ fieldTablelize($row, $field) }}
                             @endif
                         </td>
                         @endforeach
