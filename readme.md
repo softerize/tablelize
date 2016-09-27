@@ -15,7 +15,7 @@ Or add it to composer.json:
 ```
 {
     "require": {
-        "softerize/tablelize": ">=0.1.0"
+        "softerize/tablelize": "^0.1.0"
     }
 }
 ```
