@@ -54,24 +54,27 @@ if (!function_exists('headerTablelize')) {
             if($sortOrder == 'desc')
             {
                 $sorting = 'sort-column sort-desc';
-                $icon = 'glyphicon glyphicon-sort-by-alphabet-alt';
+                $icon = config('tablelize.icons.sort_desc');
             }
             else
             {
                 $sorting = 'sort-column sort-asc';
-                $icon = 'glyphicon glyphicon-sort-by-alphabet';
+                $icon = config('tablelize.icons.sort_asc');
             }
         }
         else
         {
             $sorting = 'sort-column';
-            $icon = 'glyphicon glyphicon-sort';
+            $icon = config('tablelize.icons.sort');
         }
+
+        // Define icon html
+        $icon_html = ( $icon ? "<span class=\"{$icon} pull-right\"></span>" : '' );
 
         // Javascript for sorting
         $js_event = "document.querySelector('#{$id} input[name=ss]').value='{$name}';document.getElementById('{$id}').submit();";
 
-        return "<th class=\"tablelize-field {$sorting}\" onclick=\"{$js_event}\">{$label}<span class=\"{$icon} pull-right\"></span></th>";
+        return "<th class=\"tablelize-field {$sorting}\" onclick=\"{$js_event}\">{$label}{$icon_html}</th>";
     }
 }
 

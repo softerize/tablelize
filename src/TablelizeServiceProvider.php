@@ -29,13 +29,17 @@ class TablelizeServiceProvider extends ServiceProvider
     }
 
     /**
-     * Publish datatables assets.
+     * Publish tablelize assets.
      */
     protected function publishAssets()
     {
         $this->publishes([
+            __DIR__ . '/config/tablelize.php' => config_path('tablelize.php'),
+        ], 'config');
+
+        $this->publishes([
             __DIR__ . '/resources/views' => base_path('/resources/views/vendor/softerize/tablelize'),
-        ], 'table-list');
+        ], 'views');
     }
 
     /**
@@ -57,6 +61,8 @@ class TablelizeServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/tablelize.php', 'tablelize'
+        );
     }
 }

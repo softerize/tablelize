@@ -19,7 +19,7 @@
                         <div class="form-inline">
                             @foreach($buttons as $button)
                                 @if(is_array($button))
-                                <a class="{{ $button['css'] or 'btn btn-primary' }}"
+                                <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                    title="{{ $button['title'] or '' }}"
                                    href="{{ url($button['url']) }}">
                                     @if(isset($button['icon']))
@@ -36,8 +36,8 @@
                                 <div class="input-group">
                                     <input type="text" name="s" value="{{ old('s', $search) }}" placeholder="Search" class="form-control" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="glyphicon glyphicon-search"></i>
+                                        <button class="{{ config('tablelize.buttons.search') }}" type="submit">
+                                            <i class="{{ config('tablelize.icons.search') }}"></i>
                                         </button>
                                     </span>
                                 </div>
@@ -74,7 +74,7 @@
                                 @if(is_array($button))
                                     @if((isset($button['condition']) && $row->{$button['condition']}())
                                         || !isset($button['condtion']))
-                                    <a class="{{ $button['css'] or 'btn btn-primary' }}"
+                                    <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                        title="{{ $button['title'] or '' }}"
                                        href="{{ url($button['url'], $row->{$idField}) }}">
                                         @if(isset($button['icon']))
