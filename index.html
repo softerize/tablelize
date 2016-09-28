@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Tablelize by softerize</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="assets/css/normalize.css" media="screen">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="assets/css/github-light.css" media="screen">
   </head>
   <body>
     <section class="page-header">
@@ -18,14 +19,16 @@
       <a href="https://github.com/softerize/tablelize/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
+    <section class="index">
+        <span class="show-index fa fa-bars"></span>
+    </section>
+    
     <section class="main-content">
-      <h1>
-<a id="table-list" class="anchor" href="#table-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tablelize</h1>
+      <h1><a id="tablelize" class="anchor" href="#tablelize" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Tablelize</h1>
 
 <p>Customizable Laravel Eloquent html tables with pagination, search, sorting and buttons.</p>
 
-<h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+<h2><a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Installation</h2>
 
 <p>Require it directly with composer:</p>
 
@@ -36,7 +39,7 @@
 
 <pre><code>{
     "require": {
-        "softerize/tablelize": "&gt;=0.1.0"
+        "softerize/tablelize": "&#94;0.1.0"
     }
 }
 </code></pre>
@@ -45,8 +48,9 @@
 
 <pre><code>Softerize\Tablelize\TablelizeServiceProvider::class,</code></pre>
 
-<h2>
-<a id="simple-execution" class="anchor" href="#simple-execution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Simple execution</h2>
+<h2><a id="executing" class="anchor" href="#executing" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Executing</h2>
+
+<h3><a id="simple" class="anchor" href="#simple" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Simple</h3>
 
 <p>In your route/controller, do the following:</p>
 
@@ -64,12 +68,11 @@
 <span class="pl-s1">{<span class="pl-k">!!</span> <span class="pl-smi">$tablelize</span><span class="pl-k">-&gt;</span>generate() <span class="pl-k">!!</span>}</span>
 <span class="pl-s1"><span class="pl-k">@</span><span class="pl-c1">endsection</span></span></pre></div>
 
-<p>This is what you'll get:</p>
+<p>This is what you'll get (field names are fetched using <code>trans('validation.attributes.'.$field)</code>):</p>
 
-<p><img src="http://www.softerize.com/wp-content/uploads/2016/09/example-simple.png" alt="Simple example"></p>
+<p><img src="assets/img/example-simple.png" alt="Simple example"></p>
 
-<h2>
-<a id="executing-with-more-options" class="anchor" href="#executing-with-more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Executing with more options</h2>
+<h3><a id="advanced" class="anchor" href="#advanced" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Advanced</h3>
 
 <p>If you want to customize fields and add buttons you can use the following logic:</p>
 
@@ -128,15 +131,15 @@
 
 <p>The result of the advanced example is:</p>
 
-<p><img src="http://www.softerize.com/wp-content/uploads/2016/09/example-advanced.png" alt="Advanced example"></p>
+<p><img src="assets/img/example-advanced.png" alt="Advanced example"></p>
 
-<h2>
-<a id="creating-the-instance" class="anchor" href="#creating-the-instance" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating the instance</h2>
+<h2><a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Documentation</h2>
+
+<h3><a id="creating-the-instance" class="anchor" href="#creating-the-instance" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Creating the instance</h3>
 
 <p>In order to create a new instance, you have to instantiate the class <code>\Softerize\Tablelize\Tablelize</code>. The construct method takes 3 paramenters <code>($query, Request $request, array $options = [])</code>.</p>
 
-<h3>
-<a id="query" class="anchor" href="#query" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$query</h3>
+<h4><a id="query" class="anchor" href="#query" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$query</h4>
 
 <p>You have 3 possibilities to use as the first parameter:</p>
 
@@ -153,18 +156,17 @@
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
 
-<h3>
-<a id="request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$request</h3>
+<h4><a id="request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$request</h4>
 
 <p>This is the request object you get from Laravel.</p>
 
-<h3>
-<a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>$options</h3>
+<h4><a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$options</h4>
 
 <p>Here is the complete list of options you can use at this time.</p>
 
-<h4>
-<a id="url" class="anchor" href="#url" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>url</h4>
+<h3><a id="list-of-options" class="anchor" href="#list-of-options" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Options</h3>
+
+<h4><a id="url" class="anchor" href="#url" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>url</h4>
 
 <p>Define the base URL to be used by the search form.</p>
 
@@ -175,7 +177,7 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="id" class="anchor" href="#id" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>id</h4>
+<a id="id" class="anchor" href="#id" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>id</h4>
 
 <p>In case you have more than one table in the same page (inside tabs for example), you can use the ID to differentiate them.</p>
 
@@ -186,7 +188,7 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="fields" class="anchor" href="#fields" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>fields</h4>
+<a id="fields" class="anchor" href="#fields" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>fields</h4>
 
 <p>Array with fields definition. You can use methods as well for greater control over the display. Each field can be a simple string with the field name or an array with the following options:</p>
 
@@ -218,9 +220,9 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="querystring" class="anchor" href="#querystring" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>queryString</h4>
+<a id="querystring" class="anchor" href="#querystring" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>queryString</h4>
 
-<p>Array with additional query string values. Useful if you need to define which tab the list is associated with. This way when you take an action on an specific list, the queryString parameters will be sent with the request.</p>
+<p>Array with additional query string values. Useful if you need to define which tab the table is associated with. This way when you take an action on an specific table, the queryString parameters will be sent with the request.</p>
 
 <p><small><em>Default:</em> empty</small></p>
 
@@ -231,11 +233,11 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="sort-and-sortorder" class="anchor" href="#sort-and-sortorder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>sort and sortOrder</h4>
+<a id="sort-and-sortorder" class="anchor" href="#sort-and-sortorder" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>sort and sortOrder</h4>
 
 <p>Default field for sorting and initial sort order.</p>
 
-<p><small><em>Default:</em> first field from the list in ASC order</small></p>
+<p><small><em>Default:</em> first field from the table in ASC order</small></p>
 
 <div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
 <span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>sort<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
@@ -243,7 +245,7 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="buttons" class="anchor" href="#buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>buttons</h4>
+<a id="buttons" class="anchor" href="#buttons" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>buttons</h4>
 
 <p>Array with buttons definition. Each button can be a string with the HTML or an array with the following options:</p>
 
@@ -276,7 +278,7 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="rowactions" class="anchor" href="#rowactions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>rowActions</h4>
+<a id="rowactions" class="anchor" href="#rowactions" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>rowActions</h4>
 
 <p>Array with buttons for each entry. Each button can be a string with the HTML or an array with the following options:</p>
 
@@ -309,7 +311,7 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h4>
-<a id="noentriesmsg" class="anchor" href="#noentriesmsg" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>noEntriesMsg</h4>
+<a id="noentriesmsg" class="anchor" href="#noentriesmsg" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>noEntriesMsg</h4>
 
 <p>In case you want to change the message shown when there are no entries you can do that using this parameter.</p>
 
@@ -320,20 +322,26 @@
 <span class="pl-s1">];</span></pre></div>
 
 <h2>
-<a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support</h2>
+<a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Support</h2>
 
 <p>In case you need support, please create an issue and we will check it as soon as possible.</p>
 
 <p>If you want to hire a professional support, let us know at <a href="http://www.softerize.com/contact/">http://www.softerize.com/contact/</a>.</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/softerize/table-list">Tablelize</a> is maintained by <a href="https://github.com/softerize">softerize</a>.</span>
+        <a href="http://www.softerize.com" class="softerize-btn">
+            <img src="assets/img/softerize.jpg" alt="Softerize" />
+        </a>
+
+        <span class="site-footer-owner"><a href="https://github.com/softerize/tablelize">Tablelize</a> is maintained by <a href="https://github.com/softerize">softerize</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
 
     </section>
 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/script.js"></script>
   
   </body>
 </html>
