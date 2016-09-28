@@ -32,8 +32,7 @@
 
 <p>Require it directly with composer:</p>
 
-<pre><code>$ composer require softerize/tablelize
-</code></pre>
+<pre><code>$ composer require softerize/tablelize</code></pre>
 
 <p>Or add it to composer.json:</p>
 
@@ -133,6 +132,26 @@
 
 <p><img src="assets/img/example-advanced.png" alt="Advanced example"></p>
 
+<h2><a id="customizing" class="anchor" href="#customizing" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Customizing</h2>
+
+<p>You can customize the table by setting the instance parameters (of course) as well as by replacing the package assets.</p>
+
+<h3><a id="customizing-config" class="anchor" href="#customizing-config" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Config</h3>
+
+<p>Execute the following command to publish the config file:</p>
+
+<pre><code>$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="config"</code></pre>
+
+<p>This will add a <em>tablelize.php</em> config file to your config folder.</p>
+
+<h3><a id="customizing-views" class="anchor" href="#customizing-views" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Views</h3>
+
+<p>Execute the following command to publish the views:</p>
+
+<pre><code>$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="views"</code></pre>
+
+<p>This will add Tablelize view(s) to <em>resources/views/vendor/softerize/tablelize/</em>. Currently it's only one big view, but it will be refactored (hopefully) soon.</p>
+
 <h2><a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Documentation</h2>
 
 <h3><a id="creating-the-instance" class="anchor" href="#creating-the-instance" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Creating the instance</h3>
@@ -162,7 +181,7 @@
 
 <h4><a id="options" class="anchor" href="#options" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$options</h4>
 
-<p>Here is the complete list of options you can use at this time.</p>
+<p>Array with all options. For a list of all possible options please check the next section.</p>
 
 <h3><a id="list-of-options" class="anchor" href="#list-of-options" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Options</h3>
 
