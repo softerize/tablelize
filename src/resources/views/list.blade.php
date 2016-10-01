@@ -34,7 +34,7 @@
 
                             <div class="pull-right">
                                 <div class="input-group">
-                                    <input type="text" name="s" value="{{ old('s', $search) }}" placeholder="Search" class="form-control" />
+                                    <input type="text" name="s" value="{{ old('s', $search) }}" placeholder="{{ trans('tablelize::strings.search') }}" class="form-control" />
                                     <span class="input-group-btn">
                                         <button class="{{ config('tablelize.buttons.search') }}" type="submit">
                                             <i class="{{ config('tablelize.icons.search') }}"></i>
@@ -50,7 +50,7 @@
                         {!! headerTablelize($id, $field, $sortField, $sortOrder) !!}
                     @endforeach
                     @if($rowActions)
-                    <th>Actions</th>
+                    <th>{{ trans('tablelize::strings.actions') }}</th>
                     @endif
                 </tr>
             </thead>
@@ -93,7 +93,7 @@
                 @else
                     <tr>
                         <td colspan="{{ ($rowActions ? (count($fields) + 1) : count($fields)) }}">
-                            <em>{{ ($noEntriesMsg ? $noEntriesMsg : 'No entries found.') }}</em>
+                            <em>{{ ($noEntriesMsg ? $noEntriesMsg : trans('tablelize::strings.noEntriesMsg')) }}</em>
                         </td>
                     </tr>
                 @endif
@@ -103,7 +103,7 @@
                     <td colspan="{{ ($rowActions ? (count($fields) + 1) : count($fields)) }}">
                         <div class="form-inline">
                             <label>
-                                Show
+                                {{ trans('tablelize::strings.beforeSize') }}
                                 <select name="ps" class="form-control" onchange="this.form.submit()">
                                     @foreach(array(10 => 10, 25 => 25, 50 => 50) as $key => $value)
                                     <option value="{{ $key }}" <?php echo ($key == old('ps', $pageSize) ? 'selected' : '')?>>
@@ -111,7 +111,7 @@
                                     </option>
                                     @endforeach
                                 </select>
-                                entries
+                                {{ trans('tablelize::strings.afterSize') }}
                             </label>
 
                             <div class="pull-right">

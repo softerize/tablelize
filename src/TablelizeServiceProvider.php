@@ -24,6 +24,8 @@ class TablelizeServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'tablelize');
+        $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'tablelize');
+
         $this->registerHelpers();
         $this->publishAssets();
     }
@@ -38,8 +40,12 @@ class TablelizeServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/resources/views' => base_path('/resources/views/vendor/softerize/tablelize'),
+            __DIR__ . '/resources/views' => resource_path('views/vendor/tablelize'),
         ], 'views');
+
+        $this->publishes([
+            __DIR__.'/resources/lang' => resource_path('lang/vendor/tablelize'),
+        ], 'translations');
     }
 
     /**

@@ -296,8 +296,14 @@ class Tablelize
                 continue;
             }
 
-            $whereCondition = ( isset($field['name']) ? $field['name'] : $field );
+            // Check which is the real field name for the query
+            if(is_array($field)) {
+                $whereCondition = ( isset($field['search']) ? $field['search'] : $field['name'] );
+            } else {
+                $whereCondition = $field;
+            }
 
+            // Add the where condition
             if($key === 0)
             {
                 // First item
