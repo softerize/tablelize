@@ -118,30 +118,23 @@ a {
 .main-content p {
   margin-bottom: 1em; }
 .main-content code {
-  padding: 2px 4px;
-  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 0.9rem;
-  color: #383e41;
-  background-color: #f3f6fa;
+  border-radius: 0.3rem; }
+.main-content code.inline {
+  padding: 2px 4px;
+  font-family: monospace, monospace;
+  font-size: 0.9rem;
+  color: #fff;
+  background-color: #333;
   border-radius: 0.3rem; }
 .main-content pre {
-  padding: 0.8rem;
   margin-top: 0;
   margin-bottom: 1rem;
-  font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  color: #567482;
   word-wrap: normal;
-  background-color: #f3f6fa;
-  border: solid 1px #dce6f0;
   border-radius: 0.3rem; }
   .main-content pre > code {
-    padding: 0;
-    margin: 0;
     font-size: 0.9rem;
-    color: #567482;
     word-break: normal;
-    white-space: pre;
-    background: transparent;
     border: 0; }
 .main-content .highlight {
   margin-bottom: 1rem; }
@@ -149,20 +142,11 @@ a {
     margin-bottom: 0;
     word-break: normal; }
 .main-content .highlight pre, .main-content pre {
-  padding: 0.8rem;
-  overflow: auto;
   font-size: 0.9rem;
   line-height: 1.45;
   border-radius: 0.3rem; }
 .main-content pre code, .main-content pre tt {
-  display: inline;
-  max-width: initial;
-  padding: 0;
-  margin: 0;
-  overflow: initial;
   line-height: inherit;
-  word-wrap: normal;
-  background-color: transparent;
   border: 0; }
   .main-content pre code:before, .main-content pre code:after, .main-content pre tt:before, .main-content pre tt:after {
     content: normal; }
@@ -301,4 +285,8 @@ a {
     font-size: 0.7em;
     margin: 2px 0px 2px 20px;
     display: none;
+}
+
+.center {
+    text-align: center;
 }

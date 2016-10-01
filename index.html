@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="assets/css/normalize.css" media="screen">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="assets/css/agate.css" media="screen">
     <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="assets/css/github-light.css" media="screen">
   </head>
   <body>
     <section class="page-header">
@@ -32,11 +32,11 @@
 
 <p>Require it directly with composer:</p>
 
-<pre><code>$ composer require softerize/tablelize</code></pre>
+<pre><code class="bash">$ composer require softerize/tablelize</code></pre>
 
 <p>Or add it to composer.json:</p>
 
-<pre><code>{
+<pre><code class="json">{
     "require": {
         "softerize/tablelize": "&#94;0.1.0"
     }
@@ -45,7 +45,7 @@
 
 <p>After updating composer, add the ServiceProvider to the providers array in config/app.php</p>
 
-<pre><code>Softerize\Tablelize\TablelizeServiceProvider::class,</code></pre>
+<pre><code class="php">Softerize\Tablelize\TablelizeServiceProvider::class,</code></pre>
 
 <h2><a id="executing" class="anchor" href="#executing" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Executing</h2>
 
@@ -53,84 +53,145 @@
 
 <p>In your route/controller, do the following:</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Route</span><span class="pl-k">::</span>get(<span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-c1">\Illuminate\Http\</span><span class="pl-c1">Request</span> <span class="pl-smi">$request</span>){</span>
-<span class="pl-s1">    <span class="pl-c">// Create the html table using your model and the request object</span></span>
-<span class="pl-s1">    <span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>);</span>
-<span class="pl-s1">    <span class="pl-k">return</span> view(<span class="pl-s"><span class="pl-pds">'</span>home.index<span class="pl-pds">'</span></span>, <span class="pl-c1">compact</span>(<span class="pl-s"><span class="pl-pds">'</span>tablelize<span class="pl-pds">'</span></span>));</span>
-<span class="pl-s1">});</span></pre></div>
+<pre><code class="php">Route::get('links', function(\Illuminate\Http\Request $request){
+    // Create the html table using your model and the request object
+    $tablelize = new \Softerize\Tablelize\Tablelize('\App\Models\Link', $request);
+    return view('home.index', compact('tablelize'));
+});</code></pre>
 
 <p>In your view simply generate the HTML:</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">@</span><span class="pl-k">extends</span>(<span class="pl-s"><span class="pl-pds">'</span>layouts.app<span class="pl-pds">'</span></span>)</span>
-<span class="pl-s1"></span>
-<span class="pl-s1"><span class="pl-k">@</span>section(<span class="pl-s"><span class="pl-pds">'</span>content<span class="pl-pds">'</span></span>)</span>
-<span class="pl-s1">{<span class="pl-k">!!</span> <span class="pl-smi">$tablelize</span><span class="pl-k">-&gt;</span>generate() <span class="pl-k">!!</span>}</span>
-<span class="pl-s1"><span class="pl-k">@</span><span class="pl-c1">endsection</span></span></pre></div>
+<pre><code class="php">@extends('layouts.app')
 
-<p>This is what you'll get (field names are fetched using <code>trans('validation.attributes.'.$field)</code>):</p>
+@section('content')
+{!! $tablelize->generate() !!}
+@endsection</code></pre>
 
-<p><img src="assets/img/example-simple.png" alt="Simple example"></p>
+<p>This is what you'll get (field names are fetched using <code class="inline">trans('validation.attributes.'.$field)</code>):</p>
+
+<p class="center"><img src="assets/img/example-simple.png" alt="Simple example"></p>
 
 <h3><a id="advanced" class="anchor" href="#advanced" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Advanced</h3>
 
 <p>If you want to customize fields and add buttons you can use the following logic:</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Route</span><span class="pl-k">::</span>get(<span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-c1">\Illuminate\Http\</span><span class="pl-c1">Request</span> <span class="pl-smi">$request</span>){</span>
-<span class="pl-s1">    <span class="pl-c">// You can define this array inside your model</span></span>
-<span class="pl-s1">    <span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>fields<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            [</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Date<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>formatDate<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">            ],</span>
-<span class="pl-s1">            [</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Level<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>displayLevel<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>escape<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">false</span></span>
-<span class="pl-s1">            ]</span>
-<span class="pl-s1">        ],</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>buttons<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">            [</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>new-link<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-plus<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">            ]</span>
-<span class="pl-s1">        ],</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>rowActions<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">            [</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>view-link<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-search<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">                <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">            ]</span>
-<span class="pl-s1">        ]</span>
-<span class="pl-s1">    ];</span>
-<span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span>
-<span class="pl-s1">    <span class="pl-k">return</span> view(<span class="pl-s"><span class="pl-pds">'</span>home.index<span class="pl-pds">'</span></span>, <span class="pl-c1">compact</span>(<span class="pl-s"><span class="pl-pds">'</span>tablelize<span class="pl-pds">'</span></span>));</span>
-<span class="pl-s1">});</span></pre></div>
+<pre><code class="php">Route::get('links', function(\Illuminate\Http\Request $request){
+    // You can define this array inside your model
+    $options = [
+        'fields' => [
+            'name',
+            'url',
+            [
+                'name'   => 'updated_at',
+                'label'  => 'Date',
+                'method' => 'formatDate'
+            ],
+            [
+                'name'   => 'level',
+                'label'  => 'Level',
+                'method' => 'displayLevel',
+                'escape' => false,
+                'search' => false
+            ]
+        ],
+        'buttons' => [
+            [
+                'url'  => 'new-link',
+                'icon' => 'glyphicon glyphicon-plus',
+                'text' => 'New'
+            ]
+        ],
+        'rowActions' => [
+            [
+                'url'  => 'view-link',
+                'icon' => 'glyphicon glyphicon-search',
+                'text' => 'View'
+            ]
+        ]
+    ];
 
-<p>The view is the same as in the simple execution. In your model you can define methods to display in your table:</p>
+    $tablelize = new \Softerize\Tablelize\Tablelize('\App\Models\Link', $request, $options);
+    return view('home.index', compact('tablelize'));
+});</code></pre>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">formatDate</span>(<span class="pl-smi">$field_value</span>) {</span>
-<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-c1">date</span>(<span class="pl-s"><span class="pl-pds">'</span>jS \of F Y<span class="pl-pds">'</span></span>, <span class="pl-c1">strtotime</span>(<span class="pl-smi">$field_value</span>));</span>
-<span class="pl-s1">        <span class="pl-c">// Or</span></span>
-<span class="pl-s1">        <span class="pl-c">// return $this-&gt;updated_at-&gt;format('jS \of F Y');</span></span>
-<span class="pl-s1">    }</span>
-<span class="pl-s1"></span>
-<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-en">displayLevel</span>(<span class="pl-smi">$field_value</span>) {</span>
-<span class="pl-s1">        <span class="pl-k">if</span>(<span class="pl-smi">$field_value</span> <span class="pl-k">===</span> <span class="pl-s"><span class="pl-pds">'</span>Google<span class="pl-pds">'</span></span>) {</span>
-<span class="pl-s1">            <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;span class="label label-success"&gt;High&lt;/span&gt;<span class="pl-pds">'</span></span>;</span>
-<span class="pl-s1">        }</span>
-<span class="pl-s1">        <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;span class="label label-danger"&gt;Low&lt;/span&gt;<span class="pl-pds">'</span></span>;</span>
-<span class="pl-s1">    }</span></pre></div>
+<p>The view is the same as before. In your model you can define methods to display in your table:</p>
+
+<pre><code class="php">    public function formatDate($field_value) {
+        return date('jS \of F Y', strtotime($field_value));
+        // Or
+        // return $this->updated_at->format('jS \of F Y');
+    }
+
+    public function displayLevel($field_value) {
+        if($field_value === 'Google') {
+            return '<span class="label label-success">High</span>';
+        }
+        return '<span class="label label-danger">Low</span>';
+    }</code></pre>
 
 <p>The result of the advanced example is:</p>
 
-<p><img src="assets/img/example-advanced.png" alt="Advanced example"></p>
+<p class="center"><img src="assets/img/example-advanced.png" alt="Advanced example"></p>
+
+<h3><a id="fks" class="anchor" href="#fks" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Relationships</h3>
+
+<p>If you want to use relationships in your table, you can do the following:</p>
+
+<pre><code class="php">Route::get('links', function(\Illuminate\Http\Request $request){
+    // Query with a join statement
+    $query = \App\Models\Link::select('links.id', 'links.name', 'links.url', 'links.updated_at', 
+                'links.level', 'types.name as type_name', 'types.name as type_name')
+            ->join('types', 'types.id', '=', 'links.type_id');
+            
+    // You can define this array inside your model
+    $options = [
+        'fields' => [
+            [
+                'name'   => 'name',
+                'label'  => 'Name',
+                'search' => 'links.name' // Prevent conflict with types.name
+            ],
+            'url',
+            [
+                'name'   => 'updated_at',
+                'label'  => 'Date',
+                'method' => 'formatDate',
+                'search' => 'links.updated_at' // Prevent conflict with types.updated_at
+            ],
+            [
+                'name'   => 'level',
+                'label'  => 'Level',
+                'method' => 'displayLevel',
+                'escape' => false,
+                'search' => false
+            ],
+            [
+                'name'   => 'type_name',
+                'label'  => 'Type',
+                'search' => 'types.name' // Prevent conflict with links.name
+            ]
+        ],
+        'buttons' => [
+            [
+                'url'  => 'new-link',
+                'icon' => 'glyphicon glyphicon-plus',
+                'text' => 'New'
+            ]
+        ],
+        'rowActions' => [
+            [
+                'url'  => 'view-link',
+                'icon' => 'glyphicon glyphicon-search',
+                'text' => 'View'
+            ]
+        ]
+    ];
+
+    $tablelize = new \Softerize\Tablelize\Tablelize($query, $request, $options);
+    return view('home.index', compact('tablelize'));
+});</code></pre>
+
+<p>The view is the same and you'll also need the model methods defined in the advanced example.</p>
 
 <h2><a id="customizing" class="anchor" href="#customizing" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Customizing</h2>
 
@@ -140,23 +201,31 @@
 
 <p>Execute the following command to publish the config file:</p>
 
-<pre><code>$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="config"</code></pre>
+<pre><code class="bash">$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="config"</code></pre>
 
 <p>This will add a <em>tablelize.php</em> config file to your config folder.</p>
+
+<h3><a id="customizing-translations" class="anchor" href="#customizing-translations" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Translations</h3>
+
+<p>Execute the following command to publish the translation file:</p>
+
+<pre><code class="bash">$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="translations"</code></pre>
+
+<p>This will add Tablelize translation to <em>resources/lang/vendor/tablelize/</em>.</p>
 
 <h3><a id="customizing-views" class="anchor" href="#customizing-views" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Views</h3>
 
 <p>Execute the following command to publish the views:</p>
 
-<pre><code>$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="views"</code></pre>
+<pre><code class="bash">$ php artisan vendor:publish --provider="Softerize\Tablelize\TablelizeServiceProvider" --tag="views"</code></pre>
 
-<p>This will add Tablelize view(s) to <em>resources/views/vendor/softerize/tablelize/</em>. Currently it's only one big view, but it will be refactored (hopefully) soon.</p>
+<p>This will add Tablelize view(s) to <em>resources/views/vendor/tablelize/</em>. Currently it's only one big view, but it will be refactored (hopefully) soon.</p>
 
 <h2><a id="documentation" class="anchor" href="#documentation" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Documentation</h2>
 
 <h3><a id="creating-the-instance" class="anchor" href="#creating-the-instance" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Creating the instance</h3>
 
-<p>In order to create a new instance, you have to instantiate the class <code>\Softerize\Tablelize\Tablelize</code>. The construct method takes 3 paramenters <code>($query, Request $request, array $options = [])</code>.</p>
+<p>In order to create a new instance, you have to instantiate the class <code class="inline">\Softerize\Tablelize\Tablelize</code>. The construct method takes 3 paramenters <code class="inline">($query, Request $request, array $options = [])</code>.</p>
 
 <h4><a id="query" class="anchor" href="#query" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$query</h4>
 
@@ -164,16 +233,16 @@
 
 <p>Use a model instance:</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-k">new</span> <span class="pl-c1">\App\Models\</span><span class="pl-c1">Link</span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+<pre><code class="php">$tablelize = new \Softerize\Tablelize\Tablelize(new \App\Models\Link, $request, $options);</code></pre>
 
 <p>Use a query builder object:</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$query</span> <span class="pl-k">=</span> <span class="pl-c1">\App\Models\</span><span class="pl-c1">Link</span><span class="pl-k">::</span>select(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>where(<span class="pl-s"><span class="pl-pds">'</span>created_at<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>&gt;<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>2016-08-01<span class="pl-pds">'</span></span>);</span>
-<span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-smi">$query</span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+<pre><code class="php">$query = \App\Models\Link::select('name', 'url', 'updated_at')->where('created_at', '>', '2016-08-01');
+$tablelize = new \Softerize\Tablelize\Tablelize($query, $request, $options);</code></pre>
 
 <p>Simply use a string with the model name (complete with all namespaces):</p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$tablelize</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-c1">\Softerize\Tablelize\</span><span class="pl-c1">Tablelize</span>(<span class="pl-s"><span class="pl-pds">'</span>\App\Models\Link<span class="pl-pds">'</span></span>, <span class="pl-smi">$request</span>, <span class="pl-smi">$options</span>);</span></pre></div>
+<pre><code class="php">$tablelize = new \Softerize\Tablelize\Tablelize('\App\Models\Link', $request, $options);</code></pre>
 
 <h4><a id="request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>$request</h4>
 
@@ -191,23 +260,31 @@
 
 <p><small><em>Default:</em> current URL (<code>$request-&gt;path()</code>)</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'url' => 'links'
+];</code></pre>
 
-<h4>
-<a id="id" class="anchor" href="#id" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>id</h4>
+<h4><a id="id" class="anchor" href="#id" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>id</h4>
 
 <p>In case you have more than one table in the same page (inside tabs for example), you can use the ID to differentiate them.</p>
 
 <p><small><em>Default:</em> current URL, with _ replacing the /</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>id<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'id' => 'links'
+];</code></pre>
 
-<h4>
-<a id="fields" class="anchor" href="#fields" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>fields</h4>
+<h4><a id="idField" class="anchor" href="#idField" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>idField</h4>
+
+<p>You can define the table id field name with this option. It will be used in the rowActions URL to set the entry ID (<code class="inline">url('your/url', $entry->{$idField})</code>).</p>
+
+<p><small><em>Default:</em> 'id'</small></p>
+
+<pre><code class="php">$options = [
+    'idField' => 'link_id'
+];</code></pre>
+
+<h4><a id="fields" class="anchor" href="#fields" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>fields</h4>
 
 <p>Array with fields definition. You can use methods as well for greater control over the display. Each field can be a simple string with the field name or an array with the following options:</p>
 
@@ -216,55 +293,58 @@
 <li>label: field label</li>
 <li>method: model method to be executed - optional</li>
 <li>escape: can be defined as false to for HTML values</li>
-<li>search: can be defined as false to prevent searching the field</li>
+<li>search: if you use joins in your query, you can define the search term used for the query - 'links.id' - to avoid errors. It can be defined as false to prevent searching this field</li>
 </ul>
 
-<p><small><em>Default:</em> fields will be automatically fetched from the query or the model - labels will be trans('validation.attributes.'.$field_name)</small></p>
+<p><small><em>Default:</em> fields will be automatically fetched from the query or the model - labels will be <code class="inline">trans('validation.attributes.'.$field_name)</code></small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>fields<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>updated_at<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Date<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>formatDate<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        ],</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>label<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Level<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>method<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>displayLevel<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>escape<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-c1">false</span></span>
-<span class="pl-s1">        ]</span>
-<span class="pl-s1">    ]</span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'fields' => [
+        [
+            'name'   => 'id',
+            'label'  => 'ID',
+            'search' => 'links.id'
+        ],
+        'name',
+        [
+            'name'   => 'updated_at',
+            'label'  => 'Date',
+            'method' => 'formatDate'
+        ],
+        [
+            'name'   => 'name',
+            'label'  => 'Level',
+            'method' => 'displayLevel',
+            'escape' => false,
+            'search' => false
+        ]
+    ]
+];</code></pre>
 
-<h4>
-<a id="querystring" class="anchor" href="#querystring" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>queryString</h4>
+<h4><a id="querystring" class="anchor" href="#querystring" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>queryString</h4>
 
 <p>Array with additional query string values. Useful if you need to define which tab the table is associated with. This way when you take an action on an specific table, the queryString parameters will be sent with the request.</p>
 
 <p><small><em>Default:</em> empty</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>queryString<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>tab<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>links<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">    ]</span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'queryString' => [
+        'tab' => 'links'
+    ]
+];</code></pre>
 
-<h4>
-<a id="sort-and-sortorder" class="anchor" href="#sort-and-sortorder" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>sort and sortOrder</h4>
+<h4><a id="sort-and-sortorder" class="anchor" href="#sort-and-sortorder" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>sort and sortOrder</h4>
 
 <p>Default field for sorting and initial sort order.</p>
 
 <p><small><em>Default:</em> first field from the table in ASC order</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>sort<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>sortOrder<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>desc<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'sort' => 'name',
+    'sortOrder' => 'desc'
+];</code></pre>
 
-<h4>
-<a id="buttons" class="anchor" href="#buttons" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>buttons</h4>
+<h4><a id="buttons" class="anchor" href="#buttons" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>buttons</h4>
 
 <p>Array with buttons definition. Each button can be a string with the HTML or an array with the following options:</p>
 
@@ -278,23 +358,23 @@
 
 <p><small><em>Default:</em> none</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>buttons<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>new-link<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-plus<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>New link<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        ],</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>settings<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-cog<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Settings<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Settings<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>css<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-success<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        ]</span>
-<span class="pl-s1">    ]</span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'buttons' => [
+        [
+            'url'   => 'new-link',
+            'icon'  => 'glyphicon glyphicon-plus',
+            'text'  => 'New',
+            'title' => 'New link'
+        ],
+        [
+            'url'   => 'settings',
+            'icon'  => 'glyphicon glyphicon-cog',
+            'text'  => 'Settings',
+            'title' => 'Settings',
+            'css'   => 'btn btn-success'
+        ]
+    ]
+];</code></pre>
 
 <h4>
 <a id="rowactions" class="anchor" href="#rowactions" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>rowActions</h4>
@@ -311,37 +391,35 @@
 
 <p><small><em>Default:</em> none</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>rowActions<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>view-link<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-search<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>View entry<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        ],</span>
-<span class="pl-s1">        [</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>url<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>delete-link<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>icon<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>glyphicon glyphicon-remove<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>text<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Delete<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>title<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Delete<span class="pl-pds">'</span></span>,</span>
-<span class="pl-s1">            <span class="pl-s"><span class="pl-pds">'</span>css<span class="pl-pds">'</span></span>   <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>btn btn-danger<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">        ]</span>
-<span class="pl-s1">    ]</span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'rowActions' => [
+        [
+            'url'   => 'view-link',
+            'icon'  => 'glyphicon glyphicon-search',
+            'text'  => 'View',
+            'title' => 'View entry'
+        ],
+        [
+            'url'   => 'delete-link',
+            'icon'  => 'glyphicon glyphicon-remove',
+            'text'  => 'Delete',
+            'title' => 'Delete',
+            'css'   => 'btn btn-danger'
+        ]
+    ]
+];</code></pre>
 
-<h4>
-<a id="noentriesmsg" class="anchor" href="#noentriesmsg" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>noEntriesMsg</h4>
+<h4><a id="noentriesmsg" class="anchor" href="#noentriesmsg" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>noEntriesMsg</h4>
 
 <p>In case you want to change the message shown when there are no entries you can do that using this parameter.</p>
 
-<p><small><em>Default:</em> 'No entries found.'</small></p>
+<p><small><em>Default:</em> 'No entries found.' or whatever you define in the translation file.</small></p>
 
-<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$options</span> <span class="pl-k">=</span> [</span>
-<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>noEntriesMsg<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>Nothing here!!<span class="pl-pds">'</span></span></span>
-<span class="pl-s1">];</span></pre></div>
+<pre><code class="php">$options = [
+    'noEntriesMsg' => 'Nothing here!!'
+];</code></pre>
 
-<h2>
-<a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Support</h2>
+<h2><a id="support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="fa fa-link"></span></a>Support</h2>
 
 <p>In case you need support, please create an issue and we will check it as soon as possible.</p>
 
@@ -354,12 +432,14 @@
 
         <span class="site-footer-owner"><a href="https://github.com/softerize/tablelize">Tablelize</a> is maintained by <a href="https://github.com/softerize">softerize</a>.</span>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>
+        and customized by <a href="https://github.com/oscardias">Oscar Dias</a>.</span>
       </footer>
 
     </section>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="assets/js/highlight.pack.js"></script>
     <script type="text/javascript" src="assets/js/script.js"></script>
   
   </body>

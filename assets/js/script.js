@@ -63,3 +63,5 @@ $('.show-index').click(function(){
         $(this).animate({"right":"10px"});
     }
 });
+
+hljs.initHighlightingOnLoad();
