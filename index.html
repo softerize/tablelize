@@ -387,6 +387,7 @@ $tablelize = new \Softerize\Tablelize\Tablelize($query, $request, $options);</co
 <li>icon: if you want to add an icon to the button - optional</li>
 <li>css: class to be used by the button - optional - by default all buttons will be 'btn btn-primary'</li>
 <li>title: title attribute of the button - optional</li>
+<li>condition: method used as a condition to show (or not) the button - optional</li>
 </ul>
 
 <p><small><em>Default:</em> none</small></p>
@@ -405,6 +406,14 @@ $tablelize = new \Softerize\Tablelize\Tablelize($query, $request, $options);</co
             'text'  => 'Delete',
             'title' => 'Delete',
             'css'   => 'btn btn-danger'
+        ],
+        [
+            'url'       => 'approve-link',
+            'icon'      => 'glyphicon glyphicon-ok',
+            'text'      => 'Approve',
+            'title'     => 'Approve',
+            'css'       => 'btn btn-success',
+            'condition' => 'notApproved'
         ]
     ]
 ];</code></pre>
