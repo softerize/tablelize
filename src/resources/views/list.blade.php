@@ -73,7 +73,7 @@
                             @foreach($rowActions as $button)
                                 @if(is_array($button))
                                     @if((isset($button['condition']) && $row->{$button['condition']}())
-                                        || !isset($button['condtion']))
+                                        || !isset($button['condition']))
                                     <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                        title="{{ $button['title'] or '' }}"
                                        href="{{ url($button['url'], $row->{$idField}) }}">
