@@ -138,7 +138,7 @@ class Tablelize
 
         $this->options = new TablelizeOptions([
             'url'          => $url,
-            'id'           => ( isset($options['id']) ? $options['id'] : 'tl_' . str_replace('/', '_', $url) ),
+            'id'           => ( isset($options['id']) ? $options['id'] : 'tl_' . md5($url) ),
             'idField'      => $idField,
             'fields'       => $fields,
             'queryString'  => ( isset($options['queryString']) ? $options['queryString'] : [] ),
