@@ -76,7 +76,7 @@
                                         || !isset($button['condition']))
                                     <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                        title="{{ $button['title'] or '' }}"
-                                       href="{{ url($button['url'], $row->{$idField}) }}">
+                                       href="{{ urlTablelize($row, $button['url'], $idField) }}">
                                         @if(isset($button['icon']))
                                         <span class="{{ $button['icon'] }}"></span>
                                         @endif

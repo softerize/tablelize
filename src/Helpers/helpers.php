@@ -103,3 +103,31 @@ if (!function_exists('fieldTablelize')) {
         }
     }
 }
+
+if (!function_exists('urlTablelize')) {
+    /**
+     * Generates the correct URL for table links
+     *
+     * @param  mixed   $row
+     * @param  string  $url
+     * @param  string  $idField
+     * @return string
+     */
+    function urlTablelize($row, $url, $idField = false)
+    {
+        preg_match_all('/\{(.*?)\}/', $url, $matches);
+
+        if(count($matches[1])) {
+            foreach($matches[1] as $match) {
+                $url = str_replace('{' . $match . '}', $row->{$match}, $url);
+            }
+
+            $url = url($url);
+        } else {
+            // Compatibility with old version
+            $url = url($url, $row->{$idField});
+        }
+
+        return $url;
+    }
+}
