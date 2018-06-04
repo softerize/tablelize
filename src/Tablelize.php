@@ -205,7 +205,7 @@ class Tablelize
         $sortOrder = $original['so'];
 
         // Search
-        $search = $original['s'];
+        $search = isset($original['s']) ? $original['s'] : null;
 
         // Check previous page size
         if($previousPageSize) {
