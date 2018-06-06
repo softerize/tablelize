@@ -131,3 +131,22 @@ if (!function_exists('urlTablelize')) {
         return $url;
     }
 }
+
+if (!function_exists('datasTablelize')) {
+    /**
+     * Generates HTML for data properties
+     *
+     * @param  array  $datas
+     * @return string
+     */
+    function datasTablelize($datas)
+    {
+        $html = [];
+
+        foreach($datas as $data => $value) {
+            $html[] = 'data-'.$data.'="'.$value.'"';
+        }
+
+        return implode(' ', $html);
+    }
+}

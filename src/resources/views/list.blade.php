@@ -21,7 +21,8 @@
                                 @if(is_array($button))
                                 <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                    title="{{ $button['title'] or '' }}"
-                                   href="{{ url($button['url']) }}">
+                                   href="{{ url($button['url']) }}"
+                                   {!! isset($button['datas']) ? datasTablelize($button['datas']) : '' !!}>
                                     @if(isset($button['icon']))
                                     <span class="{{ $button['icon'] }}"></span>
                                     @endif
@@ -76,7 +77,8 @@
                                         || !isset($button['condition']))
                                     <a class="{{ $button['css'] or config('tablelize.buttons.default') }}"
                                        title="{{ $button['title'] or '' }}"
-                                       href="{{ urlTablelize($row, $button['url'], $idField) }}">
+                                       href="{{ urlTablelize($row, $button['url'], $idField) }}"
+                                       {!! isset($button['datas']) ? datasTablelize($button['datas']) : '' !!}>
                                         @if(isset($button['icon']))
                                         <span class="{{ $button['icon'] }}"></span>
                                         @endif

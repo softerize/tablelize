@@ -72,7 +72,7 @@ class TablelizeOptions
     /**
      * Buttons' definition array
      * array(
-     *    array('url' => 'link/to/target', 'text' => 'New', 'css' => 'btn btn-primary', 'icon' => 'fa fa-plus')
+     *    array('url' => 'link/to/target', 'text' => 'New', 'css' => 'btn btn-primary', 'icon' => 'fa fa-plus', 'datas' => ['target' => 'example'])
      * )
      *
      * @var array
@@ -82,7 +82,7 @@ class TablelizeOptions
     /**
      * Possible actions for each entry
      * array(
-     *    array('url' => 'link/to/target/{id}', 'text' => 'Edit', 'css' => 'btn btn-info', 'icon' => 'fa fa-pencil')
+     *    array('url' => 'link/to/target/{id}', 'text' => 'Edit', 'css' => 'btn btn-info', 'icon' => 'fa fa-pencil', 'datas' => ['target' => 'example'])
      * )
      *
      * @var array
